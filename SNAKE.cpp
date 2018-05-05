@@ -4,8 +4,8 @@
 #include <windows.h>
 #include <unistd.h>
 
-#define num 13
-#define len 5
+#define num 13   // kich co map
+#define len 5   //do dai con ran
 char map[num][num];
 
 struct Cor{
