@@ -22,11 +22,14 @@ void display(Node *first){
 }
 
 void del_last(Node* first){
-	Node *p = first;
-	while(p->next != NULL){
-		p = p->next;
+	Node *pre = first;
+	Node *to_del =first;
+	while(to_del->next != NULL){
+		pre = to_del;
+		to_del = to_del->next;
 	}
-	delete p;
+	pre->next = NULL;
+	free(to_del);
 }
 
 int main(){
@@ -40,6 +43,7 @@ int main(){
 		temp->data = i;
 		p = p->next;
 	}
+	
 	del_last(head);
 	display(head);
 }
