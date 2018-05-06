@@ -8,18 +8,19 @@
 #define len 5
 char map[num][num];
 
-struct Cor{
+struct Data{
 	int pos_x;
 	int pos_y;
 };
 
-struct Snake{
-	Cor head, tail;
-	char dir;
-}snake;
+struct Node{
+	Data cor;
+	Node *prev;
+};
 
 
 void display(){
+	system ("cls");
 	for (int i = 0; i < num; i++){
 		for (int j = 0; j < num; j++){
 			printf("%c ", map[i][j]);
@@ -28,12 +29,43 @@ void display(){
 	}
 }
 
-void move(char dir, int pos_x_next, int pos_y_next){
-	Cor temp = snake.head;
+void delete_last(Node *first){
+	Node *p = first;
+	while (p->prev != NULL){
+		p = p->prev;
+	}
+	map[p->cor.pos_x][p->cor.pos_y] = ' ';
+	delete p;
+}
+
+void init_snake(Node *first){
+	Node *p = first;
+	for (int i = 6; i > 3; i--){
+		Node *temp = new Node();
+		p->prev = temp;
+		temp->cor.pos_y = i;
+		temp->cor.pos_x = 3;
+		p = p->prev;
+	}
+}
+
+
+void update_snake(Node *first){
+	Node *p = first;
+	while (p->prev != NULL){
+		map[p->prev->cor.pos_x][p->prev->cor.pos_y] = 'O';
+		p = p->prev;
+	}
+}
+
+void move(int dx, int dy){
 	
 }
 
 int main(){
+	Node *head = new Node();
+	head->prev = NULL;
+	
 	for (int i = 0; i < num; i++){
 		for (int j = 0; j < num; j++){
 			map[i][j] = '#';
@@ -45,15 +77,7 @@ int main(){
 		}
 	}
 	
-	
-	for (int j = 1; j <= len; j++){
-		map[3][j] = 'O';
-	}
-	snake.head.pos_x = 3; snake.head.pos_y = 6;
-	snake.tail.pos_x = snake.head.pos_x; snake.tail.pos_y = snake.head.pos_y - len;
-	
-	while(1){
-		
-	}
+	init_snake(head);
+	update_snake(head);
 	display();
 }
