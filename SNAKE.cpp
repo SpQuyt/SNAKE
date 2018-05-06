@@ -6,7 +6,7 @@
 #include <conio.h>
 #include <time.h>
 
-#define num 9
+#define num 15
 int len = 0, row, col;
 char map[num][num];
 
@@ -19,22 +19,6 @@ struct Node{
 	Data cor;
 	Node *prev;
 };
-
-int check_body(int row, int col){		//check if a part of snake's body is there?
-	if (map[row][col] == 'O' || map[row][col] == 'X'){
-		return true;
-	}
-	
-	else {
-		return false;
-	}
-
-}
-
-int gen_num(){				// generate a random column or row
-
-	return rand() % (num-2) + 1;
-}
 
 void init_map(){
 	for (int i = 0; i < num; i++){
@@ -67,7 +51,7 @@ void display(){
 		}
 		printf("\n");
 	}
-	_sleep(150); // delaying time
+	_sleep(50); // delaying time
 }
 
 void delete_last(Node *first){   //delete the tail
