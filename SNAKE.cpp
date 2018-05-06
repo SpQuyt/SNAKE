@@ -32,12 +32,15 @@ void display(){
 }
 
 void delete_last(Node *first){
-	Node *p = first;
-	for (int i = 4; i > 0; i++){
-		p = p->prev;
+	Node *pre = first;
+	Node *to_del =first;
+	while(to_del->prev != NULL){
+		pre = to_del;
+		to_del = to_del->prev;
 	}
-	map[p->cor.pos_x][p->cor.pos_y] = ' ';
-	delete p;
+	map[to_del->cor.pos_x][to_del->cor.pos_y] = ' ';
+	pre->prev = NULL;
+	free(to_del);
 }
 
 void init_snake(Node *first){
@@ -72,6 +75,8 @@ void move(Node *first, int dx, int dy){
 	temp->cor.pos_y = first->prev->cor.pos_y + dy;
 	temp->prev = first->prev;
 	first->prev = temp;
+	update_snake(first);
+	display();	
 }
 
 int main(){
@@ -94,16 +99,10 @@ int main(){
 	
 	update_snake(head);
 	display();
-	
-	Node *p = head->prev->prev;
-		map[p->cor.pos_x][p->cor.pos_y] = ' ';
-	free(head->prev);
-	head->prev = p;
-
-
-	
-	update_snake(head);
-	display();		
+	while(1){
+		move(head,0,1);
+		move(head,1,0);
+	}	
 
 		
 	
