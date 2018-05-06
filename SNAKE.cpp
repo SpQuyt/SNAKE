@@ -6,7 +6,7 @@
 #include <conio.h>
 
 #define num 13
-#define len 5
+#define len 3
 char map[num][num];
 
 struct Data{
@@ -33,7 +33,7 @@ void display(){
 
 void delete_last(Node *first){
 	Node *p = first;
-	while (p->prev != NULL){
+	for (int i = 4; i > 0; i++){
 		p = p->prev;
 	}
 	map[p->cor.pos_x][p->cor.pos_y] = ' ';
@@ -54,19 +54,24 @@ void init_snake(Node *first){
 
 void update_snake(Node *first){
 	Node *p = first;
-	while (p->prev != NULL){
-		map[p->prev->cor.pos_x][p->prev->cor.pos_y] = 'O';
-		p = p->prev;
+	while (p != NULL){
+		if (p == first){
+			p = p->prev;
+		}
+		else{
+			map[p->cor.pos_x][p->cor.pos_y] = 'O';
+			p = p->prev;	
+		}
 	}
 }
 
 void move(Node *first, int dx, int dy){
+	delete_last(first);
 	Node *temp = new Node();
 	temp->cor.pos_x = first->prev->cor.pos_x + dx;
 	temp->cor.pos_y = first->prev->cor.pos_y + dy;
 	temp->prev = first->prev;
 	first->prev = temp;
-	delete_last(first);
 }
 
 int main(){
@@ -86,8 +91,21 @@ int main(){
 	}
 	
 	init_snake(head);
-	update_snake(head);
 	
+	update_snake(head);
 	display();
+	
+	Node *p = head->prev->prev;
+		map[p->cor.pos_x][p->cor.pos_y] = ' ';
+	free(head->prev);
+	head->prev = p;
+
+
+	
+	update_snake(head);
+	display();		
+
+		
+	
 
 }
