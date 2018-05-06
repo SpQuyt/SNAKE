@@ -7,7 +7,7 @@
 #include <time.h>
 
 #define num 13
-#define len 3
+int len = 0;
 char map[num][num];
 
 struct Data{
@@ -111,6 +111,7 @@ void move(Node *first, int dx, int dy){
 	}
 	else{
 		map[gen_num()][gen_num()] = '.';
+		len++;
 	}
 	
 	update_snake(first);
@@ -148,6 +149,11 @@ void running(Node *&head){								// create a reference
 
 }
 
+void announce_over(){
+	display();
+	printf("\n\n	GAME OVER. \n\n     Your score is %d.", len);
+}
+
 int main(){
 
 	char dir;
@@ -162,5 +168,7 @@ int main(){
 	update_snake(head);
 	display();
 	running(head);
+	
+	announce_over();
 
 }
