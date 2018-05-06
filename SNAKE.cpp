@@ -6,8 +6,8 @@
 #include <conio.h>
 #include <time.h>
 
-#define num 13
-int len = 0;
+#define num 9
+int len = 0, row, col;
 char map[num][num];
 
 struct Data{
@@ -24,12 +24,16 @@ int check_body(int row, int col){		//check if a part of snake's body is there?
 	if (map[row][col] == 'O' || map[row][col] == 'X'){
 		return true;
 	}
-	return false;
+	
+	else {
+		return false;
+	}
+
 }
 
 int gen_num(){				// generate a random column or row
-	srand(time(NULL));
-	return rand() % 11 + 1;
+
+	return rand() % (num-2) + 1;
 }
 
 void init_map(){
@@ -43,7 +47,16 @@ void init_map(){
 			map[i][j] = ' ';
 		}
 	}
-	map[gen_num()][gen_num()] = '.';
+	
+	while (1){
+		srand(time(NULL));
+		row = rand() % (num-2) + 1;
+		col = rand() % (num-2) + 1;
+		if (map[row][col] != 'O' && map[row][col] != 'X'){
+				map[row][col] = '+';
+				break;
+		}
+	}
 }
 
 void display(){
@@ -54,7 +67,7 @@ void display(){
 		}
 		printf("\n");
 	}
-	_sleep(100); // delaying time
+	_sleep(150); // delaying time
 }
 
 void delete_last(Node *first){   //delete the tail
@@ -72,11 +85,11 @@ void delete_last(Node *first){   //delete the tail
 
 void init_snake(Node *first){
 	Node *p = first;
-	for (int i = 6; i > 5; i--){
+	for (int i = 2; i > 1; i--){
 		Node *temp = new Node();
 		p->prev = temp;
 		temp->cor.pos_y = i;
-		temp->cor.pos_x = 3;
+		temp->cor.pos_x = 1;
 		p = p->prev;
 	}
 }
@@ -106,12 +119,19 @@ void move(Node *first, int dx, int dy){
 	temp->prev = first->prev;
 	first->prev = temp;                                // move the head
 	
-	if (map[temp->cor.pos_x][temp->cor.pos_y] != '.'){
+	if (map[temp->cor.pos_x][temp->cor.pos_y] != '+'){
 		delete_last(first);  							// delete the tail
 	}
 	else{
-		map[gen_num()][gen_num()] = '.';
-		len++;
+		while (1){
+			row = rand() % (num-2) + 1;
+			col = rand() % (num-2) + 1;
+			if (map[row][col] != 'O' && map[row][col] != 'X'){
+					map[row][col] = '+';
+					len++;
+					break;
+			}
+		}
 	}
 	
 	update_snake(first);
@@ -120,7 +140,7 @@ void move(Node *first, int dx, int dy){
 
 void running(Node *&head){								// create a reference
 	char dir;
-	while(head->prev->cor.pos_y != num-1 && head->prev->cor.pos_y != 0 && head->prev->cor.pos_x != num-1 && head->prev->cor.pos_x != 0){
+	while((head->prev->cor.pos_y != num-1 && head->prev->cor.pos_y != 0 && head->prev->cor.pos_x != num-1 && head->prev->cor.pos_x != 0) && (map[head->prev->cor.pos_x][head->prev->cor.pos_y] != 'O')){
 			if (kbhit()){
 				if (GetAsyncKeyState(VK_UP)){
 					dir = 'w';
@@ -155,7 +175,6 @@ void announce_over(){
 }
 
 int main(){
-
 	char dir;
 
 	Node *head = new Node();
