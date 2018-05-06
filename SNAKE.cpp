@@ -3,6 +3,7 @@
 #include <string.h>
 #include <windows.h>
 #include <unistd.h>
+#include <conio.h>
 
 #define num 13
 #define len 5
@@ -27,6 +28,7 @@ void display(){
 		}
 		printf("\n");
 	}
+	sleep(1);
 }
 
 void delete_last(Node *first){
@@ -58,13 +60,19 @@ void update_snake(Node *first){
 	}
 }
 
-void move(int dx, int dy){
-	
+void move(Node *first, int dx, int dy){
+	Node *temp = new Node();
+	temp->cor.pos_x = first->prev->cor.pos_x + dx;
+	temp->cor.pos_y = first->prev->cor.pos_y + dy;
+	temp->prev = first->prev;
+	first->prev = temp;
+	delete_last(first);
 }
 
 int main(){
 	Node *head = new Node();
 	head->prev = NULL;
+	head->cor.pos_x = head->cor.pos_y = 0;
 	
 	for (int i = 0; i < num; i++){
 		for (int j = 0; j < num; j++){
@@ -79,5 +87,7 @@ int main(){
 	
 	init_snake(head);
 	update_snake(head);
+	
 	display();
+
 }
