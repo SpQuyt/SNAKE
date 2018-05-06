@@ -27,14 +27,9 @@ int check_body(int row, int col){		//check if a part of snake's body is there?
 	return false;
 }
 
-void gen_food(){
-	int row, col;
+int gen_num(){				// generate a random column or row
 	srand(time(NULL));
-	while(check_body(row,col) == true){
-		row = rand() % 11 + 1;
-		col = rand() % 11 + 1;
-	}
-	map[row][col] ='.';	
+	return rand() % 11 + 1;
 }
 
 void init_map(){
@@ -48,7 +43,7 @@ void init_map(){
 			map[i][j] = ' ';
 		}
 	}
-	gen_food();
+	map[gen_num()][gen_num()] = '.';
 }
 
 void display(){
@@ -115,7 +110,7 @@ void move(Node *first, int dx, int dy){
 		delete_last(first);  							// delete the tail
 	}
 	else{
-		gen_food();
+		map[gen_num()][gen_num()] = '.';
 	}
 	
 	update_snake(first);
@@ -162,7 +157,8 @@ int main(){
 
 	
 	init_map();	
-	init_snake(head);	
+	init_snake(head);
+
 	update_snake(head);
 	display();
 	running(head);
