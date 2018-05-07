@@ -10,6 +10,7 @@
 int len = 0;     //length of body = score
 int row, col;	// coordination of food
 char map[num][num];
+char wish[400] = {" HAPPY BIRTHDAY TO YOU. \nI know this could be awkward, but today is your special day. \nDo you still remember the email you wrote to me on M45's Boys day? \nThat you hoped we could be friend again, no matter what happened after the break-up, right? \nHope to see news from you soon. \nBest wishes, Zhang UK."};
 
 struct Data{
 	int pos_x;
@@ -20,6 +21,21 @@ struct Node{
 	Data cor;
 	Node *prev;
 };
+
+void announce_happybirthday(){
+	int i = 0;
+	while(wish[i] != '\0'){
+		if (wish[i] != '.' && wish[i] != ',' && wish[i] != '?'){
+			printf("%c", wish[i]);
+			_sleep(50);
+		}
+		else{
+			printf("%c\n", wish[i]);
+			sleep(2);
+		}
+		i++;
+	}
+}
 
 void init_map(){
 	for (int i = 0; i < num; i++){
@@ -37,7 +53,7 @@ void init_map(){
 		srand(time(NULL));
 		row = rand() % (num-2) + 1;
 		col = rand() % (num-2) + 1;
-		if (map[row][col] != 'O' && map[row][col] != 'X'){
+		if (map[row][col] != 'O' && map[row][col] != 'X'){		//check if a part of snake's body is there?
 				map[row][col] = '+';
 				break;
 		}
@@ -104,10 +120,10 @@ void move(Node *first, int dx, int dy){
 	temp->prev = first->prev;
 	first->prev = temp;                                // move the head
 	
-	if (map[temp->cor.pos_x][temp->cor.pos_y] != '+'){
+	if (map[temp->cor.pos_x][temp->cor.pos_y] != '+'){		//if the snake hasn't eaten the food
 		delete_last(first);  							// delete the tail
 	}
-	else{
+	else{														//else
 		while (1){
 			row = rand() % (num-2) + 1;
 			col = rand() % (num-2) + 1;
@@ -126,32 +142,39 @@ void move(Node *first, int dx, int dy){
 void running(Node *&head){								// create a reference
 	char dir;
 	while((head->prev->cor.pos_y != num-1 && head->prev->cor.pos_y != 0 && head->prev->cor.pos_x != num-1 && head->prev->cor.pos_x != 0) && (map[head->prev->cor.pos_x][head->prev->cor.pos_y] != 'O')){
-			if (kbhit()){
-				if (GetAsyncKeyState(VK_UP)){
-					dir = 'w';
-				}
-				else if (GetAsyncKeyState(VK_DOWN)){
-					dir = 's';
-				}
-				else if (GetAsyncKeyState(VK_RIGHT)){
-					dir = 'd';
-				}
-				else if (GetAsyncKeyState(VK_LEFT)){
-					dir = 'a';
-				}
+			if (len == 1){
+				system ("cls");
+				sleep(1);
+				announce_happybirthday();
+				break;
 			}
-			switch (dir){
-				case 'a':
-					move(head,0,-1);break;
-				case 'd':
-					move(head,0,1); break;
-				case 'w':
-					move(head,-1,0); break;
-				case 's':
-					move (head,1,0); break;
+			else{
+				if (kbhit()){
+					if (GetAsyncKeyState(VK_UP)){
+						dir = 'w';
+					}
+					else if (GetAsyncKeyState(VK_DOWN)){
+						dir = 's';
+					}
+					else if (GetAsyncKeyState(VK_RIGHT)){
+						dir = 'd';
+					}
+					else if (GetAsyncKeyState(VK_LEFT)){
+						dir = 'a';
+					}
+				}
+				switch (dir){
+					case 'a':
+						move(head,0,-1);break;
+					case 'd':
+						move(head,0,1); break;
+					case 'w':
+						move(head,-1,0); break;
+					case 's':
+						move (head,1,0); break;
+				}				
 			}
 	}
-
 }
 
 void announce_over(){
@@ -159,20 +182,29 @@ void announce_over(){
 	printf("\n\n	GAME OVER. \n\n     Your score is %d.", len);
 }
 
+
+void intro(){
+	printf("== THIS IS A SNAKE GAME ==\n");
+	printf("== IF YOU HAVE 15 SCORES, A GIFT WILL BE GIVEN TO YOU ==\n");
+	printf("== IF YOU ARE READY, PRESS ENTER AND GO ==");
+	getch();
+}
+
 int main(){
-	char dir;
+	//char dir;
 
 	Node *head = new Node();
 	head->prev = NULL;
 
-	
+	intro();
 	init_map();	
 	init_snake(head);
-
 	update_snake(head);
+	
 	display();
 	running(head);
+	return 0;
+	//announce_over();		this is for the game
 	
-	announce_over();
 
 }
