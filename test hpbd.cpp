@@ -68,6 +68,7 @@ void display(){
 		}
 		printf("\n");
 	}
+	printf("\n\nSCORES: %d", len);
 	_sleep(50); // delaying time
 }
 
@@ -142,9 +143,9 @@ void move(Node *first, int dx, int dy){
 void running(Node *&head){								// create a reference
 	char dir;
 	while((head->prev->cor.pos_y != num-1 && head->prev->cor.pos_y != 0 && head->prev->cor.pos_x != num-1 && head->prev->cor.pos_x != 0) && (map[head->prev->cor.pos_x][head->prev->cor.pos_y] != 'O')){
-			if (len == 1){
+			if (len == 23){
 				system ("cls");
-				sleep(1);
+				sleep(2);
 				announce_happybirthday();
 				break;
 			}
@@ -185,7 +186,7 @@ void announce_over(){
 
 void intro(){
 	printf("== THIS IS A SNAKE GAME ==\n");
-	printf("== IF YOU HAVE 15 SCORES, A GIFT WILL BE GIVEN TO YOU ==\n");
+	printf("== IF YOU HAVE 23 SCORES, A GIFT WILL BE GIVEN TO YOU ==\n");
 	printf("== IF YOU ARE READY, PRESS ENTER AND GO ==");
 	getch();
 }
