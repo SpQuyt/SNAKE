@@ -16,10 +16,10 @@
 		Just like its name. <br>
 		Use Up Down Right Left arrows to move the snake. <br>
 		If you get 23 scores, you will receive your gift. <br> <br>
-		IF YOU ARE READY, PRESS ANY BUTTON TO GO! <br>
+		IF YOU ARE READY, PRESS ENTER TO GO! <br>
 	</p>
 
-	<button onclick="start()">Run</button>
+<!-- 	<button onclick="start()">Run</button> -->
 	
 
 	<span id = "namepoint"></span>
@@ -185,17 +185,19 @@
 		}
 
 		function wish(){
-			var line1 = "HAPPY BIRTHDAY TO YOU. I know this could be awkward, but today is your special day. Do you still remember the email you wrote to me on M45's Boys day? That you hoped we could be friend again, no matter what happened after the break-up, right? Hope to see news from you soon. Best wishes, Zhang UK."
+			alert("Congratulation! Click OK to see your present.");
+			var line1 = "HAPPY BIRTHDAY TO YOU. I know this could be awkward, but I couldn't make it on your birthday."
 			quoc.innerHTML = namepoint.innerHTML = point.innerHTML = '';
 			var count = 0;
 			output = '';
-			while(count < 297){
+			while(line1[count] != '\0'){
 				if (line1[count] == '.' || line1[count] == '?'){
-					output += line1[count];
-					output += '<br>';
-					output += '<br>';
-					count++;
-					rule.innerHTML = output;
+						output += line1[count];
+						output += '<br>';
+						output += '<br>';
+						count++;
+						rule.innerHTML = output;
+					
 				}
 				else if (line1[count] == ','){
 					output += line1[count];
@@ -230,17 +232,20 @@
 		    		snake.dx = 1;
 		    		snake.dy = 0;
 		    		break;
+		    	case 13:
+		    		start();
+		    		break;
 		    }
 		});
 
-		// function sleep(milliseconds) {
-		//   var start = new Date().getTime();
-		//   for (var i = 0; i < 1e7; i++) {
-		//     if ((new Date().getTime() - start) > milliseconds){
-		//       break;
-		//     }
-		//   }
-		// }
+		function sleep(milliseconds) {
+		  var start = new Date().getTime();
+		  for (var i = 0; i < 1e7; i++) {
+		    if ((new Date().getTime() - start) > milliseconds){
+		      break;
+		    }
+		  }
+		}
 
 		function start(){
 			rule.innerHTML = '';
