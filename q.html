@@ -175,8 +175,11 @@
 					clearInterval(time1);
 					setTimeout(function(){ alert("YOU LOSE... PRESS F5 TO PLAY AGAIN."); }, 5);
 				}
-				else if (snake.length == 2){
+				else if (snake.length == 13*13 - 1){
+
+					alert("Congratulation! YOU WIN.");
 					wish();
+					clearInterval(time1);
 				}
 				else{
 					snake.move();
@@ -184,35 +187,38 @@
 			}
 		}
 
-		function wish(){
-			alert("Congratulation! Click OK to see your present.");
-			var line1 = "HAPPY BIRTHDAY TO YOU. I know this could be awkward, but I couldn't make it on your birthday."
-			quoc.innerHTML = namepoint.innerHTML = point.innerHTML = '';
-			var count = 0;
-			output = '';
-			while(line1[count] != '\0'){
-				if (line1[count] == '.' || line1[count] == '?'){
-						output += line1[count];
-						output += '<br>';
-						output += '<br>';
-						count++;
-						rule.innerHTML = output;
+		// function wish(){
+		// 	var line1 = "HAPPY BIRTHDAY TO YOU. I know this could be awkward, but I couldn't make it on your birthday."
+		// 	quoc.innerHTML = namepoint.innerHTML = point.innerHTML = '';
+		// 	var strlen = line1.length;
+		// 	var count = 0;
+		// 	output = '';
+			
+		// 	while(line1[count] < 93){
+		// 		console.log(line1[count]);
+		// 		count++;
+		// 		// if (line1[count] == '.' || line1[count] == '?'){
+		// 		// 		output += line1[count];
+		// 		// 		output += '<br>';
+		// 		// 		output += '<br>';
+		// 		// 		count++;
+		// 		// 		rule.innerHTML = output;
 					
-				}
-				else if (line1[count] == ','){
-					output += line1[count];
-					output += '<br>';
-					output += '   ';
-					count++;
-					rule.innerHTML = output;
-				}
-				else{
-					output += line1[count];
-					count++;
-					rule.innerHTML = output;
-				}
-			}
-		}
+		// 		// }
+		// 		// else if (line1[count] == ','){
+		// 		// 	output += line1[count];
+		// 		// 	output += '<br>';
+		// 		// 	output += '   ';
+		// 		// 	count++;
+		// 		// 	rule.innerHTML = output;
+		// 		// }
+		// 		// else{
+		// 		// 	output += line1[count];
+		// 		// 	count++;
+		// 		// 	rule.innerHTML = output;
+		// 		// }
+		// 	}
+		// }
 
 		document.addEventListener("keydown", (event) => {
 		    switch (event.keyCode) {
