@@ -3,10 +3,32 @@
 <head>
 	<title>Quoc</title>
 </head>
-
+<meta charset="utf-8">
 <body>
+	<pre id="quoc" style="
+		font-family: monospace; 
+		letter-spacing: 15px;
+		font-size: 30px;
+		">SNAKE GAME
+	</pre>
 
-	<script >
+	<p id = "rule">
+		Just like its name. <br>
+		Use Up Down Right Left arrows to move the snake. <br>
+		If you get 23 scores, you will receive your gift. <br>
+		If you are ready, press any button and GO! <br>
+	</p>
+
+	<!-- <button onclick="start()">Run</button> -->
+	
+
+	<span id = "namepoint"></span>
+	<span id = "point"></span>
+
+
+
+	<script>
+
 		function Node(_pos_x, _pos_y){
 			this.pos_x = _pos_x,
 			this.pos_y = _pos_y,
@@ -14,6 +36,8 @@
 		}
 
 		function List(){
+			this.dx = 0,
+			this.dy = 0,
 			this.head = new Node(),
 			this.length = 0,
 			this.addToLast = function(anode){
@@ -21,7 +45,6 @@
 
 				if (curnode.next == null){
 					curnode.next = anode;
-					this.length++;
 				}
 				else{
 					while(curnode.next != null){
@@ -30,16 +53,202 @@
 					curnode.next = anode;
 					this.length++;
 				}
+			},
+			this.deleteLast = function(){
+				after = this.head;
+				to_del = this.head;
+				while (to_del.next != null){
+					after = to_del;
+					to_del = to_del.next;
+				}
+				map[to_del.pos_x][to_del.pos_y] = ' ';
+				after.next = null;
+				delete to_del;
+			}
+			this.move = function(){
+				temp = new Node();
+				temp.pos_x = this.head.next.pos_x + this.dx;
+				temp.pos_y = this.head.next.pos_y + this.dy;
+				temp.next = this.head.next;
+				this.head.next = temp;
+				if (map[temp.pos_x][temp.pos_y] != '◦'){
+					this.deleteLast();
+				}
+				else{
+					this.length++;
+					generate_food()
+				}
+				update_snake();
 			}
 		}
 
-		q = new Node(1,2);
-		p = new Node(2,3);
-		pika = new List();
-		pika.addToLast(q);
-		pika.addToLast(p);
+		snake = new List();
+		snake.addToLast(new Node(6,6));
 
-		console.log(pika.head.next);
+		var quoc = document.getElementById("quoc");
+		var point = document.getElementById("point");
+		// var brick = "╝╚╗╔║═";
+		var output = '';
+		var map = 	[['╔','═','═','═','═','═','═','═','═','═','═','═','═','═','╗'],
+					['║',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'],
+					['║',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'],
+					['║',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'],
+					['║',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'],
+					['║',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'],
+					['║',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'],
+					['║',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'],
+					['║',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'],
+					['║',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'],
+					['║',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'],
+					['║',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'],
+					['║',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'],
+					['║',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'],
+					['╚','═','═','═','═','═','═','═','═','═','═','═','═','═','╝']];
+
+		// var len = 31;
+		// var map = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
+
+		// map[0][0] = '╔'; map[0][len] = '╗'; map[len][0] = '╚'; map [len][len] = '╝';
+		// for (var i = 1; i <= len-1; i++){
+		// 	map[0][i] = '═';
+		// 	map[len-1][i] = '═';
+		// 	map[i][0] = '║';
+		// 	map[i][len-1] = '║';
+		// }
+		// for (var i = 1; i <= len-2; i++){
+		// 	for (var j = 1; j <= len-2; j++){
+		// 		map[i][j] = ' ';
+		// 	}
+		// }
+		function generate_food(){
+			var _pos_x;
+			var _pos_y;
+			while(1){
+				_pos_x = Math.floor((Math.random() * 13) + 1);
+				_pos_y = Math.floor((Math.random() * 13) + 1);
+				if (map[_pos_x][_pos_y] != '☺' && map[_pos_x][_pos_y] != '☼'){
+					map[_pos_x][_pos_y] = '◦';
+					break;
+				}
+			}
+		}
+
+		function display(){
+			output = '';
+			for (var i = 0; i < 15; i++){
+				for (var j = 0; j < 15; j++){
+					output += map[i][j]; 
+				}
+				output += '<br>';
+				quoc.innerHTML = output;
+				point.innerHTML = snake.length;
+			}
+		}
+
+		function update_snake(){
+			temp = snake.head;
+			while (temp != null){
+				if (temp == snake.head){
+					temp = temp.next;
+					map[temp.pos_x][temp.pos_y] = '☺';
+					temp = temp.next;
+				}
+				else{
+					map[temp.pos_x][temp.pos_y] = '☼';
+					temp = temp.next;
+				}
+			}
+			display();
+		}
+
+		function running(){
+			var time1 =  setInterval(loopSnake, 100);
+			function loopSnake() {
+				if (map[snake.head.next.pos_x][snake.head.next.pos_y] == '☼') {
+					clearInterval(time1);
+					setTimeout(function(){ alert("YOU LOSE... PRESS F5 TO PLAY AGAIN."); }, 5);
+				}
+				else if (snake.head.next.pos_x == 14 || snake.head.next.pos_x == 0 || snake.head.next.pos_y == 14 || snake.head.next.pos_x == 0)
+				{
+					clearInterval(time1);
+					setTimeout(function(){ alert("YOU LOSE... PRESS F5 TO PLAY AGAIN."); }, 5);
+				}
+				else if (snake.length == 2){
+					clearInterval(time1);
+					wish();
+				}
+				else{
+					snake.move();
+				}
+			}
+		}
+
+		function wish(){
+			var line1 = "HAPPY BIRTHDAY TO YOU. I know this could be awkward, but today is your special day. Do you still remember the email you wrote to me on M45's Boys day? That you hoped we could be friend again, no matter what happened after the break-up, right? Hope to see news from you soon. Best wishes, Zhang UK."
+			quoc.innerHTML = namepoint.innerHTML = point.innerHTML = '';
+			//var line = setInterval(loopline, 1000);
+			var count = 0;
+			while(1){
+				console.log(line1[count]);
+				count++;
+				if (count == 17){
+					break;
+				}
+			}
+			// function loopline(){
+			// 	var char = setInterval(loopchar, 500);
+			// 	function loopchar(){
+			// 		if (line1[count] == '.' || line1[count] == '?'){
+			// 			rule.innerHTML += '<br>';
+			// 			rule.innerHTML += '<br>';
+			// 			count++;
+			// 		}
+			// 		else if (line1[count] == ','){
+			// 			rule.innerHTML += '<br>';
+			// 			rule.innerHTML += '   ';
+			// 			count++;
+			// 		}
+			// 		else{
+			// 			rule.innerHTML += line1[count];
+			// 			count++;
+			// 		}
+			// 	}
+			// }
+		}
+
+		document.addEventListener("keydown", (event) => {
+		    switch (event.keyCode) {
+		    	case 39:
+		    		snake.dx = 0;
+		    		snake.dy = 1;
+		    		break;
+		    	case 37:
+		    		snake.dx = 0;
+		    		snake.dy = -1;
+		    		break;
+		    	case 38:
+		    		snake.dx = -1;
+		    		snake.dy = 0;
+		    		break;
+		    	case 40:
+		    		snake.dx = 1;
+		    		snake.dy = 0;
+		    		break;
+		    	default:
+		    		start();
+		    }
+		});
+
+		function start(){
+			var rule = document.getElementById("rule");
+			rule.innerHTML = '';
+			var namepoint = document.getElementById("namepoint");
+			namepoint.innerHTML = 'POINTS: ';
+			generate_food();
+			update_snake();
+			running();
+		}
+		
 
 	</script>
 </body>
