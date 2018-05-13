@@ -15,11 +15,11 @@
 	<p id = "rule">
 		Just like its name. <br>
 		Use Up Down Right Left arrows to move the snake. <br>
-		If you get 23 scores, you will receive your gift. <br>
-		If you are ready, press any button and GO! <br>
+		If you get 23 scores, you will receive your gift. <br> <br>
+		IF YOU ARE READY, PRESS ANY BUTTON TO GO! <br>
 	</p>
 
-	<!-- <button onclick="start()">Run</button> -->
+	<button onclick="start()">Run</button>
 	
 
 	<span id = "namepoint"></span>
@@ -87,6 +87,8 @@
 
 		var quoc = document.getElementById("quoc");
 		var point = document.getElementById("point");
+		var rule = document.getElementById("rule");
+		var namepoint = document.getElementById("namepoint");
 		// var brick = "╝╚╗╔║═";
 		var output = '';
 		var map = 	[['╔','═','═','═','═','═','═','═','═','═','═','═','═','═','╗'],
@@ -174,7 +176,6 @@
 					setTimeout(function(){ alert("YOU LOSE... PRESS F5 TO PLAY AGAIN."); }, 5);
 				}
 				else if (snake.length == 2){
-					clearInterval(time1);
 					wish();
 				}
 				else{
@@ -186,34 +187,29 @@
 		function wish(){
 			var line1 = "HAPPY BIRTHDAY TO YOU. I know this could be awkward, but today is your special day. Do you still remember the email you wrote to me on M45's Boys day? That you hoped we could be friend again, no matter what happened after the break-up, right? Hope to see news from you soon. Best wishes, Zhang UK."
 			quoc.innerHTML = namepoint.innerHTML = point.innerHTML = '';
-			//var line = setInterval(loopline, 1000);
 			var count = 0;
-			while(1){
-				console.log(line1[count]);
-				count++;
-				if (count == 17){
-					break;
+			output = '';
+			while(count < 297){
+				if (line1[count] == '.' || line1[count] == '?'){
+					output += line1[count];
+					output += '<br>';
+					output += '<br>';
+					count++;
+					rule.innerHTML = output;
+				}
+				else if (line1[count] == ','){
+					output += line1[count];
+					output += '<br>';
+					output += '   ';
+					count++;
+					rule.innerHTML = output;
+				}
+				else{
+					output += line1[count];
+					count++;
+					rule.innerHTML = output;
 				}
 			}
-			// function loopline(){
-			// 	var char = setInterval(loopchar, 500);
-			// 	function loopchar(){
-			// 		if (line1[count] == '.' || line1[count] == '?'){
-			// 			rule.innerHTML += '<br>';
-			// 			rule.innerHTML += '<br>';
-			// 			count++;
-			// 		}
-			// 		else if (line1[count] == ','){
-			// 			rule.innerHTML += '<br>';
-			// 			rule.innerHTML += '   ';
-			// 			count++;
-			// 		}
-			// 		else{
-			// 			rule.innerHTML += line1[count];
-			// 			count++;
-			// 		}
-			// 	}
-			// }
 		}
 
 		document.addEventListener("keydown", (event) => {
@@ -234,15 +230,20 @@
 		    		snake.dx = 1;
 		    		snake.dy = 0;
 		    		break;
-		    	default:
-		    		start();
 		    }
 		});
 
+		// function sleep(milliseconds) {
+		//   var start = new Date().getTime();
+		//   for (var i = 0; i < 1e7; i++) {
+		//     if ((new Date().getTime() - start) > milliseconds){
+		//       break;
+		//     }
+		//   }
+		// }
+
 		function start(){
-			var rule = document.getElementById("rule");
 			rule.innerHTML = '';
-			var namepoint = document.getElementById("namepoint");
 			namepoint.innerHTML = 'POINTS: ';
 			generate_food();
 			update_snake();
