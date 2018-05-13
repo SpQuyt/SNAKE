@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Quoc</title>
+</head>
+
+<body>
+
+	<script >
+		function Node(_pos_x, _pos_y){
+			this.pos_x = _pos_x,
+			this.pos_y = _pos_y,
+			this.next = null
+		}
+
+		function List(){
+			this.head = new Node(),
+			this.length = 0,
+			this.addToLast = function(anode){
+				curnode = this.head;
+
+				if (curnode.next == null){
+					curnode.next = anode;
+					this.length++;
+				}
+				else{
+					while(curnode.next != null){
+						curnode = curnode.next;
+					}
+					curnode.next = anode;
+					this.length++;
+				}
+			}
+		}
+
+		q = new Node(1,2);
+		p = new Node(2,3);
+		pika = new List();
+		pika.addToLast(q);
+		pika.addToLast(p);
+
+		console.log(pika.head.next);
+
+	</script>
+</body>
+</html>
